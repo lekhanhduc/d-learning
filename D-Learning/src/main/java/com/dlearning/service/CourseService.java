@@ -14,14 +14,13 @@ import java.util.List;
 public class CourseService {
 
     private final CourseRepository courseRepository;
-    private final CourseMapper courseMapper;
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
     public void saveCourse(CourseDTO course) {
-        Course courseEntity = courseMapper.toCourse(course);
+        Course courseEntity = CourseMapper.toCourse(course);
         courseRepository.save(courseEntity);
     }
 
