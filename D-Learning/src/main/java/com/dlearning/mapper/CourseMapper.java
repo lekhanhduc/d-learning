@@ -7,21 +7,23 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
-     @Mapping(target = "title", source = "course.title")
-     @Mapping(target = "description", source = "course.description")
-     @Mapping(target = "price", source = "course.price")
-     @Mapping(target = "duration", source = "course.duration")
-     @Mapping(target = "language", source = "course.language")
-     @Mapping(target = "level", source = "course.level")
-     @Mapping(target = "thumbnail", source = "course.thumbnail")
-     CourseDTO toCourseDTO(Course course);
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "price", source = "price")
+    @Mapping(target = "duration", source = "duration")
+    @Mapping(target = "language", source = "language")
+    @Mapping(target = "level", source = "level")
+    @Mapping(target = "thumbnail", source = "thumbnail")
+    Course toCourse(CourseDTO courseDTO);
 
-     @Mapping(target = "course.title", source = "title")
-     @Mapping(target = "course.description", source = "description")
-     @Mapping(target = "course.price", source = "price")
-     @Mapping(target = "course.duration", source = "duration")
-     @Mapping(target = "course.language", source = "language")
-     @Mapping(target = "course.level", source = "level")
-     @Mapping(target = "course.thumbnail", source = "thumbnail")
-     Course toCourse(CourseDTO courseDTO);
+    @Mapping(target = "courseId", source = "courseId")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "price", source = "price")
+    @Mapping(target = "duration", source = "duration")
+    @Mapping(target = "language", source = "language")
+    @Mapping(target = "level", source = "level")
+    @Mapping(target = "thumbnail", source = "thumbnail")
+    @Mapping(target = "videoUrl", source = "videoUrl")
+    CourseDTO toCourseDTO(Course course);
 }
