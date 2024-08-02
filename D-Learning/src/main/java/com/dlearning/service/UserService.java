@@ -22,7 +22,6 @@ public class UserService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
-    UserMapper userMapper;
 
     public User findUserByEmail(String email){
         return userRepository.findByEmail(email);
@@ -38,7 +37,7 @@ public class UserService {
         if(userByUsername != null || userByEmail != null){
             throw new DataIntegrityViolationException("Email or Username already exists");
         }
-        User user = userMapper.toUser(create);
+        User user = UserMapper.toUser(create);
         user.setRole(UserRole.STUDENT);
         user.setCreatedBy(create.getUsername());
         user.setPassword(passwordEncoder.encode(create.getPassword()));
@@ -46,7 +45,7 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        return userMapper.userResponse(user);
+        return UserMapper.toUserResponse(user);
     }
 
     public void updateUserToken(String token, String username) {

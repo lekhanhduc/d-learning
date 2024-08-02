@@ -23,11 +23,10 @@ public class CourseController {
 
     private final CourseService courseService;
     private final CloudinaryService cloudinaryService;
-    private final CourseMapper courseMapper;
 
     @GetMapping("/courses")
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        List<CourseDTO> courseList = courseService.getAllCourses().stream().map(courseMapper::toCourseDTO).toList();
+        List<CourseDTO> courseList = courseService.getAllCourses().stream().map(CourseMapper::toCourseDTO).toList();
         return ResponseEntity.ok().body(courseList);
     }
 
