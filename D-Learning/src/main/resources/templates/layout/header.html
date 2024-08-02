@@ -1,0 +1,30 @@
+<header th:fragment="header">
+    <div class="header">
+        <a class="logo" href="/">
+            <img th:src="@{/user/images/logo.png}" alt="Logo">
+            <span>D-Learning</span>
+        </a>
+        <div class="menu">
+            <div class="dropdown">
+                <a href="#">Danh mục</a>
+                <div class="dropdown-content">
+                    <a href="#">Category 1</a>
+                    <a href="#">Category 2</a>
+                    <a href="#">Category 3</a>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Tìm kiếm khóa học">
+                <button> <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <a href="#" class="cta-button">Kích hoạt khóa học</a>
+        </div>
+        <div class="menu">
+            <a href="/shop-cart" class="cart-icon">
+                <i class="fa-solid fa-shopping-cart"></i>
+            </a>
+            <a href="/login">Đăng nhập</a>
+            <a href="/register" class="cta-button">Đăng ký</a>
+        </div>
+    </div>
+</header>

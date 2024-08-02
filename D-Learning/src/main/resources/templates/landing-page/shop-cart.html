@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/head :: head}">
+    <title>Cart</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{layout/header :: header}"></div>
+
+<main id="cart-main">
+    <div class="cart-container">
+        <div class="breadcrumb">
+            <a href="#">Trang chủ</a> > <a href="#">Giỏ hàng</a>
+        </div>
+        <h1>Giỏ hàng</h1>
+        <p>Bạn đang có 1 sản phẩm trong giỏ hàng</p>
+        <div class="cart-content">
+            <div class="cart-items">
+                <div class="cart-header">
+                    <input type="checkbox" id="select-all">
+                    <label for="select-all">Chọn tất cả</label>
+                </div>
+                <div class="cart-item">
+                    <input type="checkbox" class="select-item">
+                    <div class="item-image">
+                        <img src="/user/images/jquery.png" alt="Course Image">
+                    </div>
+                    <div class="item-details">
+                        <h3>Procedural Python - Lập trình hàm trong Python</h3>
+                        <p>Nguyễn Đình Hoa Cương</p>
+                        <div class="item-price">
+                            <span class="original-price">399,999 đ</span>
+                            <span class="discounted-price">199,999 đ</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <!-- Thêm các khóa học khác tương tự ở đây -->
+            </div>
+            <div class="cart-summary">
+                <h2>Hoá đơn</h2>
+                <p>Giá chưa giảm: 399,999 đ</p>
+                <p>Giảm giá: -200,000 đ</p>
+                <p>Mã giảm giá: Không áp dụng</p>
+                <h3>Tổng cộng: 199,999 đ</h3>
+                <button class="checkout-btn">THANH TOÁN</button>
+                <div class="apply-coupon">
+                    <p>Áp dụng mã khuyến học</p>
+                    <input type="text" placeholder="Nhập mã giảm giá hoặc phiếu ưu đãi">
+                    <button class="apply-btn">Áp dụng</button>
+                </div>
+                <div class="payment-methods">
+                    <p>Chúng tôi chấp nhận thanh toán bằng</p>
+                    <div class="payment-logos">
+                        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo"
+                             class="transparent-bg">
+                        <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg"
+                             alt="MoMo" class="transparent-bg" style="border-radius: 9%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{layout/footer :: footer}"></div>
+</body>
+
+</html>

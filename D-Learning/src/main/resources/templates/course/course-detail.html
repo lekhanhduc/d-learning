@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail - D-Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .footer-section {
+            background-color: #333;
+            color: #ddd;
+            padding: 40px 0 20px 0;
+            width: 100%;
+        }
+
+        .footer-section .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section .footer-column {
+            flex: 1 1 200px;
+            margin: 10px 0;
+        }
+
+        .footer-section .footer-column h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #FFC107;
+        }
+
+        .footer-section .footer-column p,
+        .footer-section .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        .footer-section .footer-column a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            margin-top: 10px;
+        }
+
+        .footer-social a {
+            margin-right: 10px;
+            font-size: 1.2em;
+            color: #ddd;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+            color: #aaa;
+        }
+
+        .footer-note p {
+            margin: 0;
+        }
+
+        .footer-app-links img {
+            width: 120px;
+            margin: 10px 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding-top: 80px;
+            /* Adjust according to header height */
+        }
+
+        .my-header {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .my-header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .my-header .logo img {
+            height: 60px;
+            width: 60px;
+            margin-right: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+
+        .my-header .logo span {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FFC107;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .my-header .menu {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .my-header a,
+        .my-header .dropdown {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1em;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .my-header a:hover,
+        .my-header .dropdown:hover {
+            color: #ddd;
+        }
+
+        .my-header .cta-button {
+            background-color: #FFC107;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .my-header .cta-button:hover {
+            background-color: #FFA000;
+        }
+
+        .my-search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .my-search-bar input {
+            border: none;
+            padding: 10px;
+            width: 100%;
+            color: #fff;
+            background-color: transparent;
+            outline: none;
+        }
+
+        .my-search-bar button {
+            background-color: #555;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .account-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .account-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 100%;
+            transform: translateX(-50%);
+            background-color: #444;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 28px;
+        }
+
+        .account-dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .account-dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        .account-dropdown-content.show {
+            display: block;
+        }
+
+        .cart-icon {
+            font-size: 25px;
+            margin-right: 20px;
+            /* Điều chỉnh khoảng cách của giỏ hàng */
+        }
+
+        #account-icon {
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 25px;
+        }
+
+        /* Thêm cho dropdown khác (Danh mục) */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #444;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        .course-detail-header {
+            background: linear-gradient(135deg, #FFD700 10%, #FFA500 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+
+        .course-thumbnail {
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .course-card {
+            border-radius: 8px;
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .course-benefits {
+            margin-top: 20px;
+        }
+
+        .course-benefits div {
+            margin-bottom: 10px;
+        }
+
+        .text-primary {
+            color: #FFA500;
+        }
+
+        .course-avatar {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .cta-buttons {
+            margin-top: 20px;
+        }
+
+        .course-header-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .custom-list-item {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .custom-list-item i {
+            margin-right: 10px;
+            color: #FFD700;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #FFA500;
+            border-radius: 8px;
+        }
+
+        .lesson-item i {
+            color: #FFA500;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .related-courses {
+            margin-top: 30px;
+        }
+
+        .related-course-item {
+            margin-bottom: 20px;
+        }
+
+        .related-course-item img {
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .related-course-item h5 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .related-courses-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .related-course-item {
+            flex: 1 1 30%;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .related-course-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .related-course-item h5 {
+            padding: 10px;
+            margin: 0;
+            background: #FFD700;
+            color: #333;
+        }
+
+        .related-course-item:hover {
+            transform: scale(1.05);
+        }
+
+        .sticky-sidebar {
+            position: sticky;
+            top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+<header th:fragment="header">
+    <div class="my-header">
+        <a class="logo" href="/">
+            <img th:src="@{/user/images/logo.png}" alt="Logo">
+            <span>D-Learning</span>
+        </a>
+        <div class="menu">
+            <div class="dropdown">
+                <a href="#">Danh mục</a>
+                <div class="dropdown-content">
+                    <a href="#">Category 1</a>
+                    <a href="#">Category 2</a>
+                    <a href="#">Category 3</a>
+                </div>
+            </div>
+            <div class="my-search-bar">
+                <input type="text" placeholder="Tìm kiếm khóa học">
+                <button> <i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <a href="#" class="cta-button">Kích hoạt khóa học</a>
+        </div>
+        <div class="menu" style="display: flex; align-items: center;">
+            <a href="/shop-cart" class="cart-icon" style="margin-right: 20px;">
+                <i class="fa-solid fa-shopping-cart"></i>
+            </a>
+            <div class="account-dropdown">
+                <i id="account-icon" class="fa-solid fa-user"></i>
+                <div id="account-menu" class="account-dropdown-content">
+                    <a href="#">Đăng xuất</a>
+                    <a href="#">Cập nhật hồ sơ</a>
+                    <a href="#">Khóa học yêu thích</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container page-wrapper">
+    <div class="course-detail-header">
+        <i class="fas fa-book course-header-icon"></i>
+        <h2 class="font-weight-bold" th:text="${course.title}">Course Title</h2>
+        <p class="lead" th:text="${course.author.username}">Author Name</p>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="course-content course-card">
+                <h4 class="font-weight-bold text-primary mb-4">Lộ trình khóa học</h4>
+                <ol class="list-unstyled">
+                    <li class="custom-list-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="font-weight-bold" th:text="${course.description}"></span>
+                        <span class="text-muted">(1 video, 11 scorm)</span>
+                    </li>
+                </ol>
+                <div class="cta-buttons">
+                    <button class="btn btn-warning primary-button">Xem thêm</button>
+                </div>
+                <div class="mb-4">
+                    <img th:src="${course.thumbnail}" alt="Course Thumbnail" class="course-thumbnail" />
+                </div>
+                <div class="d-flex align-items-center mb-4">
+                    <img src="/user/images/anh1.jpg" alt="" class="course-avatar mr-3" />
+                    <div>
+                        <p class="font-weight-bold mb-0" th:text="${course.author.username}">Author Name</p>
+                        <small class="text-muted">Instructor</small>
+                    </div>
+                </div>
+                <h4 class="font-weight-bold text-primary mb-4">Các bài học</h4>
+                <div class="lesson-item">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Bài học 1: Giới thiệu về khóa học</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Bài học 2: Cài đặt môi trường phát triển</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Bài học 3: Các khái niệm cơ bản</span>
+                </div>
+                <!-- Add more lessons as needed -->
+            </div>
+            <div class="related-courses">
+                <h4 class="font-weight-bold text-primary mb-4">Khóa học liên quan</h4>
+                <div class="related-courses-wrapper">
+                    <div class="related-course-item">
+                        <img src="/user/images/git.png" alt="Related Course">
+                        <h5 class="text-primary">Khóa học Git</h5>
+                    </div>
+                    <div class="related-course-item">
+                        <img src="/user/images/web.jpg" alt="Related Course">
+                        <h5 class="text-primary">Khóa học Web</h5>
+                    </div>
+                    <div class="related-course-item">
+                        <img src="/user/images/frontend.png" alt="Related Course">
+                        <h5 class="text-primary">Khóa học Frontend</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="course-card sticky-sidebar text-center">
+                <h4 class="font-weight-bold text-primary mb-4" th:text="${course.title}">Course Title</h4>
+                <p class="text-muted" th:text="${course.author.username}" style="font-weight: bold;"></p>
+                <div class="relative mb-4">
+                    <img src="/user/images/anh1.jpg" alt="Course Thumbnail" class="course-thumbnail" />
+                </div>
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <span class="text-muted line-through mr-2" th:text="${course.price}">399,999 ₫</span>
+                </div>
+                <p class="text-muted text-center mb-4">Ưu đãi sẽ kết thúc sau <span
+                        id="course-discount-time-left">01 : 48 : 33</span></p>
+                <a href="/shop-cart" class="btn btn-warning primary-button">MUA NGAY <i
+                        class="fas fa-shopping-cart"></i></a>
+                <button class="btn btn-secondary secondary-button">THÊM VÀO GIỎ HÀNG <i
+                        class="fas fa-cart-plus"></i></button>
+                <div class="course-benefits text-left">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ml-2">Học tập chủ động và tương tác</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ml-2">Thực hành và đánh giá xuyên suốt</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ml-2">Hoạt động học tập đa dạng và hướng mục tiêu</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-star text-warning"></i>
+                        <span class="ml-2">Môi trường lập trình tác tại chỗ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-section" th:fragment="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>Về Chúng Tôi</h4>
+                <p>Điều khoản</p>
+                <p>Chính sách bảo mật</p>
+            </div>
+            <div class="footer-column">
+                <h4>Cộng Đồng</h4>
+                <p>Chăm sóc khách hàng</p>
+                <p>Blog</p>
+                <p>Danh mục</p>
+            </div>
+            <div class="footer-column">
+                <h4>Địa Chỉ</h4>
+                <p>Công ty TNHH Công Nghệ Giáo Dục Topica Việt Nam</p>
+                <p>MST: 0109475876</p>
+                <p>Địa chỉ: Tầng 6, Tòa nhà Kim Khí Thăng long, Số 1 Lương Yên, Phường Bạch Đằng, Quận Hai Bà Trưng,
+                    Thành phố Hà Nội, Việt Nam</p>
+                <p>Email: trogiup@edumall.vn</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook" style="color: #007bff"></i></a>
+                    <a href="#"><i class="fab fa-youtube" style="color: red"></i></a>
+                </div>
+            </div>
+            <div class="footer-column footer-app-links">
+                <h4>Tải App D-Learning</h4>
+                <a href="#"><img th:src="@{/user/images/store-play.png}" alt="App Store"></a>
+                <a href="#"><img th:src="@{/user/images/store-play.png}" alt="Google Play"></a>
+            </div>
+        </div>
+        <div class="footer-note">
+            <p>&copy; 2024 Công ty TNHH Công Nghệ Giáo Dục Topica Việt Nam. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const accountIcon = document.getElementById('account-icon');
+        const accountMenu = document.getElementById('account-menu');
+
+        accountIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            accountMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!accountIcon.contains(event.target)) {
+                accountMenu.classList.remove('show');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}">
+    <title>Login</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{layout/header :: header}"></div>
+
+<div class="page-wrapper-add">
+    <div class="header-icons" style="text-align: center; margin-bottom: 10px; margin-top: 30px">
+        <i class="fas fa-graduation-cap" style="font-size: 56px; color: #007bff; margin-right: 10px;"></i>
+        <span style="font-size: 30px; font-weight: bold; color: #FFC107;">D-LEARNING</span>
+    </div>
+    <main class="content-section">
+        <section class="course-form-section">
+            <h2 style="text-align: center">Thêm Khóa Học Mới</h2>
+            <div class="spinner" id="spinner"></div>
+            <button class="cancel-button" id="cancel-button">Hủy</button>
+            <form id="course-form">
+                <table>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-heading"></i><label for="title">Tiêu đề:</label></td>
+                        <td><input type="text" id="title" name="title" required></td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-align-left"></i><label for="description">Mô tả:</label></td>
+                        <td><textarea id="description" name="description" required></textarea></td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-dollar-sign"></i><label for="price">Giá:</label></td>
+                        <td><input type="number" id="price" name="price" required></td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-clock"></i><label for="duration">Thời lượng (giờ):</label></td>
+                        <td><input type="number" id="duration" name="duration" required></td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-language"></i><label for="language">Ngôn ngữ:</label></td>
+                        <td><input type="text" id="language" name="language" required></td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-level-up-alt"></i><label for="level">Cấp độ:</label></td>
+                        <td>
+                            <select id="level" name="level" required>
+                                <option value="BEGINNER">Beginner</option>
+                                <option value="INTERMEDIATE">Intermediate</option>
+                                <option value="ADVANCED">Advanced</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="form-group">
+                        <td class="form-group-icon"><i class="fas fa-image"></i><label for="thumbnail">Chọn ảnh đại diện:</label></td>
+                        <td>
+                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required>
+                            <img id="thumbnail-preview" class="thumbnail-preview" src="#" alt="Preview" style="display:none;"/>
+                        </td>
+                    </tr>
+<!--                    <tr class="form-group">-->
+<!--                        <td class="form-group-icon"><i class="fas fa-video"></i><label for="video">Chọn video giảng dạy:</label></td>-->
+<!--                        <td><input type="file" id="video" name="video" accept="video/*" required></td>-->
+<!--                    </tr>-->
+                </table>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-text" id="progress-text"></div>
+                <button type="submit" style="background-color: #C89F65;">Thêm Khóa Học</button>
+            </form>
+        </section>
+    </main>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let abortController;
+
+        // Xử lý sự kiện 'submit' của form
+        $('#course-form').on('submit', function(event) {
+            event.preventDefault(); // Ngăn chặn form gửi dữ liệu theo cách mặc định
+            var formData = new FormData(this); // Lấy dữ liệu từ form
+
+            // Tạo một AbortController để quản lý và có thể hủy yêu cầu
+            abortController = new AbortController();
+            var signal = abortController.signal;
+
+            // Hiển thị spinner, nút hủy và thanh tiến trình
+            $('#spinner').show();
+            $('#cancel-button').show();
+            $('.progress-container').show();
+
+            // Gửi yêu cầu AJAX để tải lên dữ liệu
+            $.ajax({
+                url: '/api/v1/upload', // URL của API endpoint để xử lý tải lên
+                type: 'POST', // Phương thức HTTP
+                data: formData, // Dữ liệu gửi đi (form data)
+                contentType: false, // Không đặt loại nội dung, để mặc định cho FormData
+                processData: false, // Không xử lý dữ liệu (quan trọng khi sử dụng FormData)
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest(); // Tạo một XMLHttpRequest mới
+                    // Lắng nghe sự kiện 'progress' để cập nhật tiến trình tải lên
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 99; // Tính phần trăm hoàn thành (giới hạn 99%)
+                            $('#progress-bar').width(`${percentComplete}%`); // Cập nhật chiều rộng của thanh tiến trình
+                            $('#progress-text').text(`Tải lên: ${Math.round(percentComplete)}%`); // Hiển thị phần trăm hoàn thành
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function(response) {
+                    // Ẩn spinner, nút hủy và thanh tiến trình khi tải lên thành công
+                    $('#spinner').hide();
+                    $('#cancel-button').hide();
+                    $('.progress-container').hide();
+
+                    // Hiển thị thông báo thành công bằng SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Khóa học đã được thêm thành công!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    // Đặt lại form và ẩn ảnh preview
+                    $('#course-form')[0].reset();
+                    $('#thumbnail-preview').hide();
+                    $('#progress-bar').width('0');
+                    $('#progress-text').text('');
+                },
+                error: function(xhr, status, error) {
+                    // Ẩn spinner, nút hủy và thanh tiến trình khi gặp lỗi
+                    $('#spinner').hide();
+                    $('#cancel-button').hide();
+                    $('.progress-container').hide();
+
+                    if (status !== 'abort') {
+                        // Hiển thị thông báo lỗi bằng SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Đã xảy ra lỗi khi thêm khóa học: ' + xhr.responseText,
+                            showConfirmButton: true
+                        });
+                    } else {
+                        // Hiển thị thông báo khi quá trình tải lên bị hủy
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Đã hủy',
+                            text: 'Quá trình tải lên đã bị hủy.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            });
+        });
+
+        // Xử lý sự kiện click của nút hủy
+        $('#cancel-button').on('click', function() {
+            if (abortController) {
+                abortController.abort(); // Hủy yêu cầu AJAX
+                $('#spinner').hide();
+                $('#cancel-button').hide();
+                $('.progress-container').hide();
+                $('#progress-bar').width('0');
+                $('#progress-text').text('');
+            }
+        });
+
+        // Hiển thị ảnh preview khi người dùng chọn file
+        $('#thumbnail').on('change', function() {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#thumbnail-preview').attr('src', e.target.result).show(); // Hiển thị ảnh preview
+                };
+                reader.readAsDataURL(file); // Đọc nội dung của file dưới dạng URL
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

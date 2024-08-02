@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}">
+  <title>Home</title>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div th:replace="~{layout/header :: header}"></div>
+
+  <main class="content-section">
+
+    <section class="banner-section">
+      <div class="banner-item">
+        <img src="/user/images/python.jpg" alt="Python">
+      </div>
+      <div class="banner-item">
+        <img src="/user/images/java.png" alt="Java">
+      </div>
+      <div class="banner-item">
+        <img src="/user/images/frontend.png" alt="FrontEnd">
+      </div>
+    </section>
+
+    <h2 class="courses-title">Các khóa học nổi bật</h2>
+    <section class="courses-section">
+      <div class="course-list" th:each="course : ${courses}">
+        <div class="course-item">
+          <a th:href="@{'/course-detail?id=' + ${course.courseId}}">
+            <img th:src="${course.thumbnail}" alt="Course Image">
+            <h2 class="course-title" th:text="${course.title}">Course Title</h2>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div th:replace="~{layout/footer :: footer}"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/head :: head}">
+    <title>Register</title>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+    <div th:replace="~{layout/header :: header}"></div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h2>Đăng nhập</h2>
+        <div class="social-login">
+            <button class="facebook"><img
+                    src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                    alt="Facebook"> Continue with Facebook</button>
+            <button class="google"><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8-T6jr1g5UvXbv06Y-_lCjAtaLF1NBobQKg&s"
+                    alt="Google"> Continue with Google</button>
+            <button class="apple"><img
+                    src="https://w7.pngwing.com/pngs/695/105/png-transparent-apple-logo-business-apple-logo-outline-heart-logo-computer-wallpaper-thumbnail.png"
+                    alt="Apple"> Continue with Apple</button>
+        </div>
+
+        <div class="divider">Hoặc tiếp tục với</div>
+
+        <form id="register-form">
+            <div class="form-group">
+                <label for="email">Địa chỉ email</label>
+                <input type="email" id="email" placeholder="mail@example.com">
+            </div>
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" placeholder="Enter Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" placeholder="Enter Password">
+            </div>
+
+            <div id="error-message" style="color: red;"></div>
+
+            <button type="submit" class="register-button">Đăng Kí</button>
+
+            <div class="additional-options">
+                <p><a href="#">Đăng nhập bằng Số điện thoại</a></p>
+                <p><a href="#">Quên mật khẩu?</a></p>
+                <p>Bạn chưa có tài khoản? <a href="#">Đăng ký</a></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 D-Learning. All rights reserved.</p>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#register-form').on('submit', function(event){
+            event.preventDefault();
+
+            let username = $('#username').val();
+            let email = $('#email').val();
+            let password = $('#password').val();
+
+            $.ajax({
+                url: '/api/v1/register',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                }),
+                success: function(response){
+                    window.location.href = '/login';
+                },
+                error: function(xhr, status, error) {
+                    let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại sau.";
+                    if (xhr.status === 409) {
+                        errorMessage = "Tên người dùng hoặc email đã tồn tại.";
+                    }
+                    $('#error-message').text(errorMessage);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+
+</html>
