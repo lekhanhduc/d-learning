@@ -29,9 +29,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     z-index: 1000;
-    position: fixed;
 }
 
 .header .logo {
@@ -619,25 +617,21 @@
 }
 
 .spinner {
-    display: none;
-    margin: 20px auto;
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     animation: spin 2s linear infinite;
+    margin: 20px auto;
+    display: none;
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
+
 
 button[type="submit"] {
     width: 100%;
@@ -705,16 +699,14 @@ button[type="submit"]:hover {
 
 .page-wrapper-add {
     width: 100%;
-    max-width: 800px;
     background: #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    margin-top: 170px;
+    font-size: 20px;
 }
 
 .course-form-section h2 {
@@ -726,20 +718,24 @@ button[type="submit"]:hover {
 }
 
 .progress-container {
-    display: none;
     width: 100%;
     background-color: #f3f3f3;
-    border-radius: 5px;
+    border-radius: 25px;
     margin-top: 20px;
+    height: 20px;
 }
 
 .progress-bar {
-    height: 20px;
-    width: 0;
+    width: 0%;
+    height: 100%;
     background-color: #3498db;
-    border-radius: 5px;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
     transition: width 0.4s ease;
 }
+
 
 .progress-text {
     text-align: center;

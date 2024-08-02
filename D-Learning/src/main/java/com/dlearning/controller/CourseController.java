@@ -1,11 +1,11 @@
 package com.dlearning.controller;
 
-
 import com.dlearning.dto.response.CourseDTO;
 import com.dlearning.entity.Course;
 import com.dlearning.mapper.CourseMapper;
 import com.dlearning.service.CloudinaryService;
 import com.dlearning.service.CourseService;
+import com.dlearning.utils.enums.CourseLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +23,11 @@ public class CourseController {
 
     private final CourseService courseService;
     private final CloudinaryService cloudinaryService;
+    private final CourseMapper courseMapper;
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseDTO>> getAllCourse() {
-        List<CourseDTO> courseList = courseService.getAllCourses().stream().map(CourseMapper::toCourseDTO).toList();
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+        List<CourseDTO> courseList = courseService.getAllCourses().stream().map(courseMapper::toCourseDTO).toList();
         return ResponseEntity.ok().body(courseList);
     }
 
@@ -37,15 +38,10 @@ public class CourseController {
                                     @RequestParam("duration") int duration,
                                     @RequestParam("language") String language,
                                     @RequestParam("level") String level,
-                                    @RequestParam("thumbnail") MultipartFile thumbnail
-//                                    @RequestParam("video") MultipartFile video
-                                   ) {
+                                    @RequestParam("thumbnail") MultipartFile thumbnail) {
         try {
-            Map<?,?> thumbnailUploadResult = cloudinaryService.uploadFile(thumbnail, "upload");
+            Map<?, ?> thumbnailUploadResult = cloudinaryService.uploadFile(thumbnail, "upload");
             String thumbnailUrl = (String) thumbnailUploadResult.get("url");
-
-//            Map<?,?> videoUploadResult = cloudinaryService.uploadVideoChunked(video, "upload");
-//            String videoUrl = (String) videoUploadResult.get("url");
 
             CourseDTO newCourse = new CourseDTO();
             newCourse.setTitle(title);
@@ -53,9 +49,8 @@ public class CourseController {
             newCourse.setPrice(price);
             newCourse.setDuration(duration);
             newCourse.setLanguage(language);
-            newCourse.setLevel(level);
+            newCourse.setLevel(CourseLevel.valueOf(level));
             newCourse.setThumbnail(thumbnailUrl);
-//            newCourse.setVideoUrl(videoUrl);
 
             courseService.saveCourse(newCourse);
 
@@ -65,6 +60,8 @@ public class CourseController {
             return ResponseEntity.status(500).body("Đã xảy ra lỗi khi thêm khóa học: " + e.getMessage());
         }
     }
+
+
 
     @GetMapping("/course-detail/{id}")
     public ResponseEntity<?> getCourseById(@PathVariable Long id){

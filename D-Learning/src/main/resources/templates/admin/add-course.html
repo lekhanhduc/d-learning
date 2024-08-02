@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/head :: head}">
-    <title>Login</title>
+    <title>Thêm Khóa Học Mới</title>
     <style>
         body, html {
             height: 100%;
@@ -15,9 +15,7 @@
     </style>
 </head>
 <body>
-
 <div th:replace="~{layout/header :: header}"></div>
-
 <div class="page-wrapper-add">
     <div class="header-icons" style="text-align: center; margin-bottom: 10px; margin-top: 30px">
         <i class="fas fa-graduation-cap" style="font-size: 56px; color: #007bff; margin-right: 10px;"></i>
@@ -26,8 +24,8 @@
     <main class="content-section">
         <section class="course-form-section">
             <h2 style="text-align: center">Thêm Khóa Học Mới</h2>
-            <div class="spinner" id="spinner"></div>
-            <button class="cancel-button" id="cancel-button">Hủy</button>
+            <div class="spinner" id="spinner" style="display:none;">Đang tải...</div>
+            <button class="cancel-button" id="cancel-button" style="display:none;">Hủy</button>
             <form id="course-form">
                 <table>
                     <tr class="form-group">
@@ -67,12 +65,8 @@
                             <img id="thumbnail-preview" class="thumbnail-preview" src="#" alt="Preview" style="display:none;"/>
                         </td>
                     </tr>
-<!--                    <tr class="form-group">-->
-<!--                        <td class="form-group-icon"><i class="fas fa-video"></i><label for="video">Chọn video giảng dạy:</label></td>-->
-<!--                        <td><input type="file" id="video" name="video" accept="video/*" required></td>-->
-<!--                    </tr>-->
                 </table>
-                <div class="progress-container">
+                <div class="progress-container" style="display:none;">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
                 <div class="progress-text" id="progress-text"></div>
@@ -82,6 +76,8 @@
     </main>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function() {
         let abortController;
@@ -108,7 +104,7 @@
                 contentType: false, // Không đặt loại nội dung, để mặc định cho FormData
                 processData: false, // Không xử lý dữ liệu (quan trọng khi sử dụng FormData)
                 xhr: function() {
-                    var xhr = new window.XMLHttpRequest(); // Tạo một XMLHttpRequest mới
+                    let xhr = new window.XMLHttpRequest(); // Tạo một XMLHttpRequest mới
                     // Lắng nghe sự kiện 'progress' để cập nhật tiến trình tải lên
                     xhr.upload.addEventListener("progress", function(evt) {
                         if (evt.lengthComputable) {
@@ -182,9 +178,9 @@
 
         // Hiển thị ảnh preview khi người dùng chọn file
         $('#thumbnail').on('change', function() {
-            var file = this.files[0];
+            let file = this.files[0];
             if (file) {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.onload = function(e) {
                     $('#thumbnail-preview').attr('src', e.target.result).show(); // Hiển thị ảnh preview
                 };
