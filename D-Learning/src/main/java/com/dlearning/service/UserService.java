@@ -47,16 +47,4 @@ public class UserService {
 
         return UserMapper.toUserResponse(user);
     }
-
-    public void updateUserToken(String token, String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            user.setRefreshToken(token);
-            userRepository.save(user);
-        }
-    }
-
-    public User findByRefreshTokenAndEmail(String token, String email){
-        return userRepository.findByRefreshTokenAndEmail(token, email);
-    }
 }

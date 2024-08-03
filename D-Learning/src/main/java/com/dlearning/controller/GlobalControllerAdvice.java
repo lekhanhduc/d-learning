@@ -26,7 +26,7 @@ public class GlobalControllerAdvice {
         User accountEntity = null;
         if (principal != null) {
             String username = principal.getName();
-            accountEntity = userService.findUserByUsername(username);
+            accountEntity = userService.findUserByEmail(username);
         } else if (oAuth2User != null){
             accountEntity = userService.findUserByUsername(oAuth2User.getAttribute("email"));
         }

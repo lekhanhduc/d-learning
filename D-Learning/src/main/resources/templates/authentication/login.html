@@ -29,20 +29,18 @@
         <div class="divider">Hoặc tiếp tục với</div>
 
 
-        <form id="login-form">
+        <form id="login-form" action="/login" method="post">
+
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter Username">
+                <input type="email" id="username" name="username" placeholder="Enter Email">
             </div>
             <div class="form-group">
                 <label for="password">Mật khẩu</label>
-                <input type="password" id="password" placeholder="Enter Password">
+                <input type="password" id="password" name="password" placeholder="Enter Password">
             </div>
-
-            <div id="error-message" style="color: red;"></div>
-
+            <p class="message">Cannot Empty</p>
             <button type="submit" class="login-button">Đăng Nhập</button>
-
             <div class="additional-options">
                 <p><a href="#">Đăng nhập bằng Số điện thoại</a></p>
                 <p><a href="#">Quên mật khẩu?</a></p>
@@ -59,39 +57,34 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function(){
+        let username = $('#username');
+        let password = $('#password');
+        let message = $('.message');
+
+        message.css('visibility', 'hidden');
+
+        function checkInputs() {
+            if (username.val().trim() === '' || password.val().trim() === '') {
+                message.css('visibility', 'visible');
+            } else {
+                message.css('visibility', 'hidden');
+            }
+        }
+
+        username.on('focus input', checkInputs);
+        password.on('focus input', checkInputs);
+
         $('#login-form').on('submit', function(event){
-            event.preventDefault();
-
-            let username = $('#username').val();
-            let password = $('#password').val();
-
-            $.ajax({
-                url: '/api/v1/auth/login',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    username: username,
-                    password: password
-                }),
-                success: function(response) {
-                    window.location.href = '/home';
-                },
-                error: function(xhr, status, error) {
-                    let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại sau.";
-                    if (xhr.status === 401) {
-                        errorMessage = "Tên người dùng hoặc mật khẩu không chính xác.";
-                    } else if (xhr.status === 409) {
-                        errorMessage = "Tên người dùng hoặc email không tồn tại.";
-                    }
-                    $('#error-message').text(errorMessage);
-                }
-            });
+            if (username.val().trim() === '' || password.val().trim() === '') {
+                message.css('visibility', 'visible');
+                event.preventDefault();
+            } else {
+                message.css('visibility', 'hidden');
+            }
         });
     });
-
 </script>
-
 </body>
 
 </html>

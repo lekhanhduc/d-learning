@@ -42,7 +42,8 @@ public class RedirectController {
 
     @GetMapping("/course-detail")
     public String getCourseDetail(@RequestParam("id") Long courseId, Model model) {
-        Course course = courseService.getCourseById(courseId);
+        Course course = courseService.findCourseById(courseId);
+        System.out.println(course);
         model.addAttribute("course", course);
         return "course/course-detail";
     }
@@ -50,5 +51,10 @@ public class RedirectController {
     @GetMapping("/shop-cart")
     public String shopCart(){
         return "landing-page/shop-cart";
+    }
+
+    @GetMapping("/403")
+    public String forbidden(){
+        return "error/access-denied";
     }
 }

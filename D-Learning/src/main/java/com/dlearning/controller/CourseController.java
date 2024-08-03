@@ -60,11 +60,9 @@ public class CourseController {
         }
     }
 
-
-
     @GetMapping("/course-detail/{id}")
     public ResponseEntity<?> getCourseById(@PathVariable Long id){
-        Course course = courseService.getCourseById(id);
+        Course course = courseService.findCourseById(id);
         if(course == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course Not Found");
         }

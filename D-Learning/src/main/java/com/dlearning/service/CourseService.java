@@ -24,7 +24,7 @@ public class CourseService {
         courseRepository.save(courseEntity);
     }
 
-    public Course getCourseById(Long id) {
+    public Course findCourseById(Long id) {
 //        return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
         return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course Not Found"));
     }

@@ -1,23 +1,33 @@
 package com.dlearning.config;
 
+import com.dlearning.entity.User;
+import com.dlearning.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomHandleSuccess implements AuthenticationSuccessHandler {
+@Component
+public class CustomAuthenticationSuccessHandler   implements AuthenticationSuccessHandler {
 
+    private final UserService userService;
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    public CustomAuthenticationSuccessHandler(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
     protected void handle(
             HttpServletRequest request,
@@ -51,16 +61,22 @@ public class CustomHandleSuccess implements AuthenticationSuccessHandler {
         throw new IllegalStateException();
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request) {
+    protected void clearAuthenticationAttributes(HttpServletRequest request, Authentication authentication) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        String email = authentication.getName();
+        User user = userService.findUserByEmail(email);
+        if(user != null){
+            session.setAttribute("name", user.getUsername());
+        }
+
     }
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         handle(request, response, authentication);
-        clearAuthenticationAttributes(request);
+        clearAuthenticationAttributes(request, authentication);
     }
 }

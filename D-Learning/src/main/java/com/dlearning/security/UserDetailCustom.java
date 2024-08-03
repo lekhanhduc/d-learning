@@ -18,20 +18,23 @@ import java.util.Collections;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserDetailCustom implements UserDetailsService {
 
-    UserRepository userRepository;
+    final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null){
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            System.out.println("User not found");
             throw new UsernameNotFoundException("User not found");
         }
+        System.out.println("User found: " + user.getUsername());
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().name());
-
-        return new org.springframework.security.core.userdetails
-                .User(user.getUsername(),
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
                 user.getPassword(),
-                Collections.singletonList(authority));
+                Collections.singletonList(authority)
+        );
     }
 }
+

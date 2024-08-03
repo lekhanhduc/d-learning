@@ -5,14 +5,6 @@
             <span>D-Learning</span>
         </a>
         <div class="menu">
-            <div class="dropdown">
-                <a href="#">Danh mục</a>
-                <div class="dropdown-content">
-                    <a href="#">Category 1</a>
-                    <a href="#">Category 2</a>
-                    <a href="#">Category 3</a>
-                </div>
-            </div>
             <div class="search-bar">
                 <input type="text" placeholder="Tìm kiếm khóa học">
                 <button> <i class="fa-solid fa-magnifying-glass"></i></button>
@@ -23,8 +15,41 @@
             <a href="/shop-cart" class="cart-icon">
                 <i class="fa-solid fa-shopping-cart"></i>
             </a>
-            <a href="/login">Đăng nhập</a>
-            <a href="/register" class="cta-button">Đăng ký</a>
+            <nav>
+                <a class="cta-button" th:if="${account != null}" th:text="'Hello, ' + ${account.username}"></a>
+            </nav>
+            <div class="dropdown">
+                <button class="dropbtn" data-target="myDropdown">
+                    <i class="fa-solid fa-circle-user"></i>
+                </button>
+                <div class="dropdown-content" id="myDropdown">
+                    <a href="#">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Thông tin cá nhân</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>Danh sách yêu thích</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa-solid fa-chalkboard-teacher"></i>
+                        <span>Trở thành giảng viên</span>
+                    </a>
+                    <a th:href="@{/logout}" th:if="${account != null}">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                        <span>Đăng xuất</span>
+                    </a>
+                    <a th:href="@{/login}" th:if="${account == null}">
+                        <i class="fa-solid fa-sign-in-alt"></i>
+                        <span>Đăng Nhập</span>
+                    </a>
+                    <a th:href="@{/register}" th:if="${account == null}">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Đăng Kí</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </header>
+
