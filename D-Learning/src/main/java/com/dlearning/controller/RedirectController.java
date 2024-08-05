@@ -17,9 +17,6 @@ public class RedirectController {
 
     @GetMapping("/login")
     public String loginForm() {
-//        if (SecurityUtils.getCurrentUserLogin().isPresent()) {
-//            return "redirect:/home";
-//        }
         return "authentication/login";
     }
 
@@ -27,6 +24,7 @@ public class RedirectController {
     public String home(Model model) {
         List<Course> fetchAll = courseService.getAllCourses();
         model.addAttribute("courses", fetchAll);
+        fetchAll.stream().forEach(System.out::println);
         return "landing-page/home";
     }
 

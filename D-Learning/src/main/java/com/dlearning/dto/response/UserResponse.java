@@ -1,7 +1,8 @@
 package com.dlearning.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -13,6 +14,7 @@ public class UserResponse {
     private String email;
     private String username;
     boolean success;
-    @JsonProperty("access_token")
-    String token;
+    private String avatar;
+    private LocalDateTime createdAt;
+    private String createdBy;
 }
