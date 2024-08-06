@@ -1,6 +1,7 @@
 package com.dlearning.service;
 
 import com.dlearning.dto.request.UserCreate;
+import com.dlearning.dto.response.PagedResponse;
 import com.dlearning.dto.response.UserResponse;
 import com.dlearning.entity.User;
 import com.dlearning.mapper.UserMapper;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,9 +55,21 @@ public class UserService {
     }
 
 
-    public Page<UserResponse> getUsers(int pageNumber, int pageSize){
+    public PagedResponse<UserResponse> getUsers(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<User> userPage = userRepository.findAll(pageable);
-        return userPage.map(UserMapper::toUserResponse);
+
+        List<UserResponse> userResponses = userPage.getContent().stream()
+                .map(UserMapper::toUserResponse)
+                .collect(Collectors.toList());
+
+        return new PagedResponse<>(
+                userResponses,
+                userPage.getNumber(),
+                userPage.getSize(),
+                userPage.getTotalPages(),
+                userPage.getTotalElements()
+        );
     }
 }
+
