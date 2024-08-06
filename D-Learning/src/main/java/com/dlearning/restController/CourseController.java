@@ -2,11 +2,12 @@ package com.dlearning.restController;
 
 import com.dlearning.dto.response.CourseDTO;
 import com.dlearning.entity.Course;
-import com.dlearning.mapper.CourseMapper;
 import com.dlearning.service.CloudinaryService;
 import com.dlearning.service.CourseService;
 import com.dlearning.utils.enums.CourseLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,8 +27,14 @@ public class CourseController {
     private final CloudinaryService cloudinaryService;
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        List<CourseDTO> courseList = courseService.getAllCourses().stream().map(CourseMapper::toCourseDTO).toList();
+    public ResponseEntity<List<CourseDTO>> getAllCourses(@RequestParam(name = "page") Optional<Integer> pageOptional,
+                                                         @RequestParam(name = "size", defaultValue = "1") int size,
+                                                         @RequestParam(name = "name") Optional<String> nameOptional) {
+        int page = pageOptional.orElse(1);
+        String name = nameOptional.orElse("");
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<CourseDTO> courseList = courseService.fetchCourses(pageable, name);
         return ResponseEntity.ok().body(courseList);
     }
 

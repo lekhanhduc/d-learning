@@ -22,7 +22,7 @@ public class SecurityConfiguration {
 
     public static String[] PUBLIC_ENDPOINT = {
             "/", "/home", "/addCourse", "/course-detail/**",
-            "/register",
+            "/register", "/api/v1/courses/**", "/api/v1/users",
             "/user/**", "/css/**", "/js/**", "/images/**", "/fonts/**"
     };
 

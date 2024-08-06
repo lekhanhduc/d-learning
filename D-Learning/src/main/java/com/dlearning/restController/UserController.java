@@ -28,13 +28,12 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<PagedResponse<UserResponse>> getUsers(@RequestParam(name = "page", defaultValue = "0") Optional<Integer> pageOptional,
-                                                                @RequestParam(name = "size", defaultValue = "5") int size) {
-        int page = pageOptional.orElse(0);
-
-        PagedResponse<UserResponse> users = userService.getUsers(page, size);
+    public ResponseEntity<PagedResponse<UserResponse>> getUsers(@RequestParam(name = "page") Optional<Integer> pageOptional,
+                                                                @RequestParam(name = "size", defaultValue = "1") int size) {
+        int page = pageOptional.orElse(1);
+        PagedResponse<UserResponse> users = userService.getUsers(page - 1, size);
         if (users.getContent().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(users);
     }

@@ -10,6 +10,8 @@ import com.dlearning.utils.enums.UserRole;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ public class UserService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public User findUserByEmail(String email){
         return userRepository.findByEmail(email);
@@ -56,12 +59,18 @@ public class UserService {
 
 
     public PagedResponse<UserResponse> getUsers(int pageNumber, int pageSize) {
+        logger.info("Fetching users - pageNumber: {}, pageSize: {}", pageNumber, pageSize);
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<User> userPage = userRepository.findAll(pageable);
 
         List<UserResponse> userResponses = userPage.getContent().stream()
                 .map(UserMapper::toUserResponse)
                 .collect(Collectors.toList());
+
+        userResponses.forEach(System.out::println);
+
+        logger.info("Total users found: {}", userPage.getTotalElements());
 
         return new PagedResponse<>(
                 userResponses,
